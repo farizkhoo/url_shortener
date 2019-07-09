@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"database/sql"
@@ -30,7 +30,7 @@ func NewPostgres() *Postgres {
 }
 
 // Connect returns a sql.DB object
-func (p Postgres) Connect() error {
+func (p *Postgres) Connect() error {
 	connStr := fmt.Sprintf(
 		"user=%v dbname=%v host=%v password=%v sslmode=disable",
 		p.User,
@@ -67,17 +67,17 @@ func (p Postgres) GetURLFromLongURL(longURL string) (*URL, error) {
 }
 
 // StoreURL accepts a db object and url and stores it into the database
-func (p Postgres) StoreURL(url string) error {
-	uuid := uuid.New()
+func (p Postgres) StoreURL(url string) (string, error) {
+	id := uuid.New()
 	_, err := p.DB.Exec(`
 		INSERT INTO url (
 			uuid,
 			long_url
 		)
 		VALUES ($1, $2)
-	`, uuid, url)
+	`, id, url)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return id.String(), nil
 }

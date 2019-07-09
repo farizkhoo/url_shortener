@@ -11,7 +11,6 @@ new_migration/%:
 	migrate create -dir $(MIGRATION_PATH) -ext pgsql $*
 
 # Run database migrations.
-# To run all migrations use `latest`.
 .PHONY: migrate
 migrate:
 	migrate -path $(MIGRATION_PATH) -database $(DATABASE_URL) up
@@ -20,4 +19,3 @@ migrate:
 .PHONY: run/%
 run/%:
 	go run ./cmd/$*/*.go $(EXTRA_ARGS)
-
