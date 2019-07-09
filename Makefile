@@ -19,3 +19,8 @@ migrate:
 .PHONY: run/%
 run/%:
 	go run ./cmd/$*/*.go $(EXTRA_ARGS)
+
+# Run tests
+.PHONY: test
+test:
+	go test ./...
