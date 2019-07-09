@@ -1,13 +1,10 @@
 package main
 
 import (
-	"database/sql"
-	"log"
-
 	"github.com/gin-gonic/gin"
 )
 
-var db *sql.DB
+var pg *Postgres
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
@@ -15,16 +12,15 @@ func setupRouter() *gin.Engine {
 	r.POST("/shorten_url", createURLHandler)
 	r.POST("/shorten_url/", createURLHandler)
 	r.GET("/shorten_url/:id", getURLHandler)
+	r.GET("/ping", func(c *gin.Context) {
+		c.String(200, "pong")
+	})
 
 	return r
 }
 
 func main() {
-	var err error
-	db, err = NewPostgres().Connect()
-	if err != nil {
-		log.Fatalln(err)
-	}
+	pg = NewPostgres()
 
 	r := setupRouter()
 
